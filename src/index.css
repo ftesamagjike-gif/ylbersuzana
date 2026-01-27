@@ -6,43 +6,43 @@
 
 @layer base {
   :root {
-    /* Wedding Theme Colors */
-    --background: 40 33% 98%;
-    --foreground: 30 10% 20%;
+    /* Wedding Theme Colors - Warm & Romantic */
+    --background: 35 30% 97%;
+    --foreground: 25 20% 15%;
 
-    --card: 40 30% 96%;
-    --card-foreground: 30 10% 20%;
+    --card: 38 35% 95%;
+    --card-foreground: 25 20% 15%;
 
-    --popover: 40 30% 96%;
-    --popover-foreground: 30 10% 20%;
+    --popover: 38 35% 95%;
+    --popover-foreground: 25 20% 15%;
 
-    --primary: 36 40% 45%;
-    --primary-foreground: 40 33% 98%;
+    --primary: 30 45% 35%;
+    --primary-foreground: 38 35% 97%;
 
-    --secondary: 35 25% 90%;
-    --secondary-foreground: 30 10% 25%;
+    --secondary: 32 30% 88%;
+    --secondary-foreground: 25 20% 20%;
 
-    --muted: 35 20% 92%;
-    --muted-foreground: 30 10% 45%;
+    --muted: 33 25% 90%;
+    --muted-foreground: 25 15% 40%;
 
-    --accent: 30 35% 85%;
-    --accent-foreground: 30 10% 20%;
+    --accent: 28 35% 82%;
+    --accent-foreground: 25 20% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 35 25% 88%;
-    --input: 35 25% 88%;
-    --ring: 36 40% 45%;
+    --border: 32 25% 85%;
+    --input: 32 25% 85%;
+    --ring: 30 45% 35%;
 
     --radius: 0.5rem;
 
-    /* Wedding specific colors */
-    --champagne: 36 45% 78%;
-    --ivory: 40 33% 96%;
-    --gold: 43 74% 49%;
-    --gold-soft: 43 50% 70%;
-    --blush: 350 30% 90%;
+    /* Wedding specific colors - Rich & Warm */
+    --champagne: 38 50% 75%;
+    --ivory: 42 40% 95%;
+    --gold: 38 80% 50%;
+    --gold-soft: 40 55% 65%;
+    --blush: 12 40% 88%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -55,39 +55,39 @@
   }
 
   .dark {
-    --background: 30 10% 10%;
-    --foreground: 40 33% 95%;
+    --background: 25 15% 8%;
+    --foreground: 38 35% 92%;
 
-    --card: 30 10% 12%;
-    --card-foreground: 40 33% 95%;
+    --card: 25 15% 10%;
+    --card-foreground: 38 35% 92%;
 
-    --popover: 30 10% 12%;
-    --popover-foreground: 40 33% 95%;
+    --popover: 25 15% 10%;
+    --popover-foreground: 38 35% 92%;
 
-    --primary: 36 40% 55%;
-    --primary-foreground: 30 10% 10%;
+    --primary: 38 60% 55%;
+    --primary-foreground: 25 15% 8%;
 
-    --secondary: 30 15% 20%;
-    --secondary-foreground: 40 33% 95%;
+    --secondary: 25 15% 18%;
+    --secondary-foreground: 38 35% 92%;
 
-    --muted: 30 15% 18%;
-    --muted-foreground: 35 20% 65%;
+    --muted: 25 12% 16%;
+    --muted-foreground: 35 20% 60%;
 
-    --accent: 30 20% 25%;
-    --accent-foreground: 40 33% 95%;
+    --accent: 28 25% 22%;
+    --accent-foreground: 38 35% 92%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 30 15% 20%;
-    --input: 30 15% 20%;
-    --ring: 36 40% 55%;
+    --border: 25 15% 18%;
+    --input: 25 15% 18%;
+    --ring: 38 60% 55%;
 
-    --champagne: 36 35% 50%;
-    --ivory: 40 20% 20%;
-    --gold: 43 74% 49%;
-    --gold-soft: 43 40% 45%;
-    --blush: 350 20% 30%;
+    --champagne: 38 40% 45%;
+    --ivory: 40 15% 15%;
+    --gold: 38 80% 50%;
+    --gold-soft: 40 45% 40%;
+    --blush: 12 25% 25%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const CoupleIntro = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-ivory to-champagne/10 py-20">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-ivory to-champagne/20 py-20">
       <div className="container mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -19,9 +19,9 @@ const CoupleIntro = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <div className="h-px w-16 md:w-32 bg-gradient-to-r from-transparent to-gold-soft" />
+            <div className="h-px w-16 md:w-32 bg-gradient-to-r from-transparent to-gold" />
             <span className="text-gold text-2xl">💍</span>
-            <div className="h-px w-16 md:w-32 bg-gradient-to-l from-transparent to-gold-soft" />
+            <div className="h-px w-16 md:w-32 bg-gradient-to-l from-transparent to-gold" />
           </motion.div>
 
           {/* Names */}
@@ -68,29 +68,17 @@ const CoupleIntro = () => {
             </p>
           </motion.div>
 
-          {/* Spotify embed */}
+          {/* Invitation message */}
           <motion.div
-            className="pt-12"
+            className="pt-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 1.2, duration: 0.8 }}
           >
-            <p className="text-sm text-muted-foreground mb-4 tracking-wider uppercase">
-              Kënga jonë
+            <p className="font-serif text-lg md:text-xl text-muted-foreground italic max-w-md mx-auto">
+              Ju ftojmë me gëzim të madh të jeni pjesë e ditës sonë të veçantë
             </p>
-            <div className="flex justify-center">
-              <iframe
-                src="https://open.spotify.com/embed/track/7xrGMKBoMqMghcRsqcZZZ2?utm_source=generator&theme=0"
-                width="100%"
-                height="152"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                className="rounded-xl max-w-md"
-                title="Spotify Player"
-              />
-            </div>
           </motion.div>
         </motion.div>
       </div>
