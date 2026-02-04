@@ -31,11 +31,11 @@ interface YTPlayer {
 }
 
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef<YTPlayer | null>(null);
   const initDoneRef = useRef(false);
 
-  // Krijon YouTube player – provon autoplay me zë (pa mute)
+  // Krijon YouTube player – fillimisht i ndalur, nuk luhet vetë
   useEffect(() => {
     const initPlayer = () => {
       if (initDoneRef.current || !window.YT?.Player) return;
@@ -47,7 +47,7 @@ const MusicPlayer = () => {
           width: "0",
           videoId: VIDEO_ID,
           playerVars: {
-            autoplay: 1,
+            autoplay: 0,
             mute: 0,
             loop: 1,
             playlist: VIDEO_ID,
@@ -57,7 +57,6 @@ const MusicPlayer = () => {
           events: {
             onReady(event: { target: YTPlayer }) {
               playerRef.current = event.target;
-              event.target.playVideo();
             },
           },
         });
@@ -73,20 +72,6 @@ const MusicPlayer = () => {
     }
   }, []);
 
-  // Nëse shfletuesi bllokoi autoplay, një klik kudo e nis muzikën
-  useEffect(() => {
-    const startOnClick = () => {
-      const player = playerRef.current;
-      if (player?.playVideo) player.playVideo();
-    };
-    document.addEventListener("click", startOnClick, { once: true });
-    document.addEventListener("touchstart", startOnClick, { once: true });
-    return () => {
-      document.removeEventListener("click", startOnClick);
-      document.removeEventListener("touchstart", startOnClick);
-    };
-  }, []);
-
   const toggleMusic = () => {
     const player = playerRef.current;
     if (!player) return;
@@ -100,12 +85,27 @@ const MusicPlayer = () => {
 
   return (
     <>
-      {/* Kontejner i fshehur për YouTube player – autoplay me zë */}
       <div
         id="wedding-yt-player"
         className="fixed -left-[9999px] w-0 h-0 overflow-hidden"
         aria-hidden
       />
+
+      {/* Mesazhi "Klikoni për muzikë" – shfaqet kur muzika është e ndalur */}
+      <AnimatePresence>
+        {!isPlaying && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="fixed bottom-20 right-6 z-50 pointer-events-none"
+          >
+            <div className="bg-gradient-to-r from-gold-soft/95 to-gold/95 text-primary-foreground text-sm font-medium px-4 py-2 rounded-full shadow-lg border border-white/20 whitespace-nowrap">
+              Klikoni për muzikë 🎵
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <motion.button
         onClick={toggleMusic}
