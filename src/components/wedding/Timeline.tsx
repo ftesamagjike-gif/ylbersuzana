@@ -1,18 +1,36 @@
 import { motion } from "framer-motion";
-import { Clock, Heart } from "lucide-react";
+import { Clock, Heart, Music, Cake, Sparkles, UsersRound } from "lucide-react";
 
 const timelineEvents = [
   {
     time: "19:00",
-    title: "Nisja e ceremonisë",
-    description: "Arritja e mysafirëve dhe fillimi i ceremonisë",
-    icon: Clock,
+    title: "Mirëseardhje dhe pritja",
+    description: "Mbërritja e mysafirëve dhe pritja e ngrohtë",
+    icon: UsersRound,
   },
   {
-    time: "21:00",
-    title: "Ndërrimi i unazave të martesës",
-    description: "Momenti më i veçantë i dashurisë sonë",
+    time: "20:00",
+    title: "Fillimi i festës",
+    description: "Nis festimi i kësaj dite të veçantë",
     icon: Heart,
+  },
+  {
+    time: "21:30",
+    title: "Daraka & Muzikë Live",
+    description: "Shijojmë darkën dhe kënaqemi me muzikë të gjallë",
+    icon: Music,
+  },
+  {
+    time: "23:00",
+    title: "Prerja e tortës",
+    description: "Momenti i ëmbël i mbrëmjes",
+    icon: Cake,
+  },
+  {
+    time: "23:30",
+    title: "Vallëzim dhe festë pa fund",
+    description: "Festojmë dhe vallëzojmë deri në mëngjes",
+    icon: Sparkles,
   },
 ];
 

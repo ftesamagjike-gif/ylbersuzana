@@ -2,7 +2,7 @@ import HeroSection from "@/components/wedding/HeroSection";
 import CoupleIntro from "@/components/wedding/CoupleIntro";
 import Timeline from "@/components/wedding/Timeline";
 import Location from "@/components/wedding/Location";
-import Gallery from "@/components/wedding/Gallery";
+import RSVP from "@/components/wedding/RSVP";
 import Closing from "@/components/wedding/Closing";
 import MusicPlayer from "@/components/wedding/MusicPlayer";
 
@@ -14,7 +14,7 @@ const Index = () => {
       <CoupleIntro />
       <Timeline />
       <Location />
-      <Gallery />
+      <RSVP />
       <Closing />
     </main>
   );

@@ -1,17 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Start as playing
   const [hasInteracted, setHasInteracted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Spotify doesn't allow direct audio autoplay, so we use an iframe approach
-  // The iframe will be hidden and controlled via the button
 
   useEffect(() => {
-    // Try to autoplay when user first interacts with the page
+    // Auto-start music on first interaction
     const handleFirstInteraction = () => {
       if (!hasInteracted) {
         setHasInteracted(true);
@@ -19,15 +15,12 @@ const MusicPlayer = () => {
       }
     };
 
-    // Listen for any click on the document
     document.addEventListener("click", handleFirstInteraction, { once: true });
     document.addEventListener("touchstart", handleFirstInteraction, { once: true });
-    document.addEventListener("scroll", handleFirstInteraction, { once: true });
 
     return () => {
       document.removeEventListener("click", handleFirstInteraction);
       document.removeEventListener("touchstart", handleFirstInteraction);
-      document.removeEventListener("scroll", handleFirstInteraction);
     };
   }, [hasInteracted]);
 
@@ -38,22 +31,20 @@ const MusicPlayer = () => {
 
   return (
     <>
-      {/* Hidden Spotify iframe - only rendered when playing */}
-      <AnimatePresence>
-        {isPlaying && (
-          <div className="fixed -bottom-[200px] -left-[200px] opacity-0 pointer-events-none">
-            <iframe
-              src="https://open.spotify.com/embed/track/7xrGMKBoMqMghcRsqcZZZ2?utm_source=generator&theme=0"
-              width="300"
-              height="152"
-              frameBorder="0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              title="Background Music"
-            />
-          </div>
-        )}
-      </AnimatePresence>
+      {/* YouTube embed for Shyhrete Behlulit - Hidden but playing audio */}
+      {isPlaying && (
+        <div className="fixed pointer-events-none" style={{ left: '-9999px' }}>
+          <iframe
+            width="1"
+            height="1"
+            src="https://www.youtube.com/embed/BKMtuRY2plQ?autoplay=1&mute=0&loop=1&playlist=BKMtuRY2plQ&controls=0&showinfo=0&rel=0&modestbranding=1"
+            title="Shyhrete Behlulit - Wedding Music"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
 
       {/* Floating music button */}
       <motion.button
@@ -64,6 +55,7 @@ const MusicPlayer = () => {
         transition={{ delay: 1, type: "spring", stiffness: 200 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
+        aria-label={isPlaying ? "Pause music" : "Play music"}
       >
         <AnimatePresence mode="wait">
           {isPlaying ? (
