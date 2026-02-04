@@ -1,52 +1,112 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
-const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(true); // Start as playing
-  const [hasInteracted, setHasInteracted] = useState(false);
+const VIDEO_ID = "BKMtuRY2plQ";
 
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        elementId: string,
+        options: {
+          height?: string;
+          width?: string;
+          videoId?: string;
+          playerVars?: Record<string, number | string>;
+          events?: { onReady?: (event: { target: YTPlayer }) => void };
+        }
+      ) => YTPlayer;
+      PlayerState?: { PLAYING: number; PAUSED: number };
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+interface YTPlayer {
+  playVideo: () => void;
+  pauseVideo: () => void;
+  unMute: () => void;
+  mute: () => void;
+}
+
+const MusicPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const playerRef = useRef<YTPlayer | null>(null);
+  const initDoneRef = useRef(false);
+
+  // Krijon YouTube player – provon autoplay me zë (pa mute)
   useEffect(() => {
-    // Auto-start music on first interaction
-    const handleFirstInteraction = () => {
-      if (!hasInteracted) {
-        setHasInteracted(true);
-        setIsPlaying(true);
+    const initPlayer = () => {
+      if (initDoneRef.current || !window.YT?.Player) return;
+      initDoneRef.current = true;
+
+      try {
+        new window.YT!.Player("wedding-yt-player", {
+          height: "0",
+          width: "0",
+          videoId: VIDEO_ID,
+          playerVars: {
+            autoplay: 1,
+            mute: 0,
+            loop: 1,
+            playlist: VIDEO_ID,
+            controls: 0,
+            modestbranding: 1,
+          },
+          events: {
+            onReady(event: { target: YTPlayer }) {
+              playerRef.current = event.target;
+              event.target.playVideo();
+            },
+          },
+        });
+      } catch {
+        initDoneRef.current = false;
       }
     };
 
-    document.addEventListener("click", handleFirstInteraction, { once: true });
-    document.addEventListener("touchstart", handleFirstInteraction, { once: true });
+    if (window.YT?.Player) {
+      initPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = initPlayer;
+    }
+  }, []);
 
-    return () => {
-      document.removeEventListener("click", handleFirstInteraction);
-      document.removeEventListener("touchstart", handleFirstInteraction);
+  // Nëse shfletuesi bllokoi autoplay, një klik kudo e nis muzikën
+  useEffect(() => {
+    const startOnClick = () => {
+      const player = playerRef.current;
+      if (player?.playVideo) player.playVideo();
     };
-  }, [hasInteracted]);
+    document.addEventListener("click", startOnClick, { once: true });
+    document.addEventListener("touchstart", startOnClick, { once: true });
+    return () => {
+      document.removeEventListener("click", startOnClick);
+      document.removeEventListener("touchstart", startOnClick);
+    };
+  }, []);
 
   const toggleMusic = () => {
-    setIsPlaying(!isPlaying);
-    setHasInteracted(true);
+    const player = playerRef.current;
+    if (!player) return;
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+    setIsPlaying((prev) => !prev);
   };
 
   return (
     <>
-      {/* YouTube embed for Shyhrete Behlulit - Hidden but playing audio */}
-      {isPlaying && (
-        <div className="fixed pointer-events-none" style={{ left: '-9999px' }}>
-          <iframe
-            width="1"
-            height="1"
-            src="https://www.youtube.com/embed/BKMtuRY2plQ?autoplay=1&mute=0&loop=1&playlist=BKMtuRY2plQ&controls=0&showinfo=0&rel=0&modestbranding=1"
-            title="Shyhrete Behlulit - Wedding Music"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      )}
+      {/* Kontejner i fshehur për YouTube player – autoplay me zë */}
+      <div
+        id="wedding-yt-player"
+        className="fixed -left-[9999px] w-0 h-0 overflow-hidden"
+        aria-hidden
+      />
 
-      {/* Floating music button */}
       <motion.button
         onClick={toggleMusic}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold to-gold-soft shadow-lg flex items-center justify-center group hover:shadow-xl transition-shadow"
@@ -55,7 +115,7 @@ const MusicPlayer = () => {
         transition={{ delay: 1, type: "spring", stiffness: 200 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={isPlaying ? "Pause music" : "Play music"}
+        aria-label={isPlaying ? "Ndalo muzikën" : "Luaj muzikën"}
       >
         <AnimatePresence mode="wait">
           {isPlaying ? (
@@ -81,7 +141,6 @@ const MusicPlayer = () => {
           )}
         </AnimatePresence>
 
-        {/* Pulse animation when playing */}
         {isPlaying && (
           <motion.div
             className="absolute inset-0 rounded-full bg-gold/40"
@@ -91,7 +150,6 @@ const MusicPlayer = () => {
         )}
       </motion.button>
 
-      {/* Music notes animation when playing */}
       <AnimatePresence>
         {isPlaying && (
           <div className="fixed bottom-20 right-6 z-40 pointer-events-none">
