@@ -12,8 +12,8 @@ const Index = () => {
     <main className="min-h-screen overflow-x-hidden">
       <MusicPlayer />
       <HeroSection />
-      <Countdown />
       <CoupleIntro />
+      <Countdown />
       <Timeline />
       <Location />
       <RSVP />
