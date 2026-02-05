@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
 const VIDEO_ID = "BKMtuRY2plQ";
+// Fillimi i muzikës: 2:25 (2 minuta 25 sekonda)
+const START_TIME_SECONDS = 2 * 60 + 25; // 145
 
 declare global {
   interface Window {
@@ -26,6 +28,7 @@ declare global {
 interface YTPlayer {
   playVideo: () => void;
   pauseVideo: () => void;
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   unMute: () => void;
   mute: () => void;
 }
@@ -53,6 +56,7 @@ const MusicPlayer = () => {
             playlist: VIDEO_ID,
             controls: 0,
             modestbranding: 1,
+            start: START_TIME_SECONDS,
           },
           events: {
             onReady(event: { target: YTPlayer }) {
@@ -78,6 +82,7 @@ const MusicPlayer = () => {
     if (isPlaying) {
       player.pauseVideo();
     } else {
+      player.seekTo(START_TIME_SECONDS, true);
       player.playVideo();
     }
     setIsPlaying((prev) => !prev);
