@@ -1,18 +1,14 @@
-# Ky folder është për file-at audio të muzikës së dasmës
+# Ky folder është për muzikën e dasmës
 
-## Si ta përdorësh:
+## Për luajtje menjëherë me klikimin e parë
 
-1. Vendos file-in audio këtu (p.sh. `shyhrete-behlulit.mp3`)
-2. Referoje në kod si: `/audio/shyhrete-behlulit.mp3`
+1. Vendosni këngën këtu me emrin **`background.mp3`**.
+2. Faqja e ngarkon skedarin që nga fillimi; kur vizitori klikon "Luaj", muzika nis menjëherë nga 2:25, pa vonesë.
 
-Shembull:
+Nëse **nuk** vendosni `background.mp3`, do të përdoret automatikisht YouTube (mund të ketë pak vonesë në fillim).
+
 ```
 public/
   audio/
-    shyhrete-behlulit.mp3   <-- Vendose këngën këtu
-```
-
-Pastaj në kod:
-```tsx
-<source src="/audio/shyhrete-behlulit.mp3" type="audio/mpeg" />
+    background.mp3   <-- Vendosni këngën këtu
 ```

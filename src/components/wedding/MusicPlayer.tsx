@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
+// Burimi kryesor: skedar audio lokal (preload + luaj menjëherë). Vendosni file në public/audio/background.mp3
+const AUDIO_SRC = "/audio/background.mp3";
+const START_TIME_SECONDS = 2 * 60 + 25; // 2:25
+
 const VIDEO_ID = "BKMtuRY2plQ";
-// Fillimi i muzikës: 2:25 (2 minuta 25 sekonda)
-const START_TIME_SECONDS = 2 * 60 + 25; // 145
 
 declare global {
   interface Window {
@@ -33,17 +35,48 @@ interface YTPlayer {
   mute: () => void;
 }
 
+type PlaybackSource = "audio" | "youtube" | null;
+
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  const sourceRef = useRef<PlaybackSource>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const playerRef = useRef<YTPlayer | null>(null);
-  const initDoneRef = useRef(false);
+  const ytInitDoneRef = useRef(false);
 
-  // Krijon YouTube player – fillimisht i ndalur, nuk luhet vetë
+  // HTML5 Audio: krijohet menjëherë dhe preload që muzika të jetë gati me klikimin e parë
   useEffect(() => {
-    const initPlayer = () => {
-      if (initDoneRef.current || !window.YT?.Player) return;
-      initDoneRef.current = true;
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.loop = true;
 
+    const onCanPlay = () => setAudioReady(true);
+    const onError = () => setAudioReady(false);
+
+    audio.addEventListener("canplaythrough", onCanPlay, { once: true });
+    audio.addEventListener("error", onError, { once: true });
+    audio.addEventListener("play", () => setIsPlaying(true));
+    audio.addEventListener("pause", () => setIsPlaying(false));
+
+    audio.src = AUDIO_SRC;
+    audio.load();
+
+    audioRef.current = audio;
+    return () => {
+      audio.removeEventListener("canplaythrough", onCanPlay);
+      audio.removeEventListener("error", onError);
+      audio.pause();
+      audio.src = "";
+      audioRef.current = null;
+    };
+  }, []);
+
+  // YouTube fallback – vetëm nëse audio nuk është i disponueshëm
+  useEffect(() => {
+    const initYT = () => {
+      if (ytInitDoneRef.current || !window.YT?.Player) return;
+      ytInitDoneRef.current = true;
       try {
         new window.YT!.Player("wedding-yt-player", {
           height: "0",
@@ -65,27 +98,62 @@ const MusicPlayer = () => {
           },
         });
       } catch {
-        initDoneRef.current = false;
+        ytInitDoneRef.current = false;
       }
     };
-
-    if (window.YT?.Player) {
-      initPlayer();
-    } else {
-      window.onYouTubeIframeAPIReady = initPlayer;
-    }
+    if (window.YT?.Player) initYT();
+    else window.onYouTubeIframeAPIReady = initYT;
   }, []);
 
-  const toggleMusic = () => {
+  const startWithAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+    try {
+      audio.currentTime = START_TIME_SECONDS;
+      const p = audio.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          sourceRef.current = "audio";
+        }).catch(() => {});
+        return true;
+      }
+      sourceRef.current = "audio";
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const startWithYouTube = () => {
     const player = playerRef.current;
-    if (!player) return;
-    if (isPlaying) {
-      player.pauseVideo();
-    } else {
+    if (!player) return false;
+    try {
       player.seekTo(START_TIME_SECONDS, true);
       player.playVideo();
+      sourceRef.current = "youtube";
+      setIsPlaying(true);
+      return true;
+    } catch {
+      return false;
     }
-    setIsPlaying((prev) => !prev);
+  };
+
+  const toggleMusic = () => {
+    if (isPlaying) {
+      if (sourceRef.current === "audio") {
+        audioRef.current?.pause();
+      } else if (sourceRef.current === "youtube") {
+        playerRef.current?.pauseVideo();
+      }
+      setIsPlaying(false);
+      return;
+    }
+
+    // Luaj: prefero audio nëse është gati (menjëherë), përndryshe YouTube
+    if (audioReady && audioRef.current && audioRef.current.readyState >= 2) {
+      if (startWithAudio()) return;
+    }
+    startWithYouTube();
   };
 
   return (
@@ -96,7 +164,6 @@ const MusicPlayer = () => {
         aria-hidden
       />
 
-      {/* Mesazhi "Klikoni për muzikë" – shfaqet kur muzika është e ndalur */}
       <AnimatePresence>
         {!isPlaying && (
           <motion.div
