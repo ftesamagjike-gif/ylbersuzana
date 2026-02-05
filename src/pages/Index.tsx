@@ -1,4 +1,5 @@
 import HeroSection from "@/components/wedding/HeroSection";
+import Countdown from "@/components/wedding/Countdown";
 import CoupleIntro from "@/components/wedding/CoupleIntro";
 import Timeline from "@/components/wedding/Timeline";
 import Location from "@/components/wedding/Location";
@@ -11,6 +12,7 @@ const Index = () => {
     <main className="min-h-screen overflow-x-hidden">
       <MusicPlayer />
       <HeroSection />
+      <Countdown />
       <CoupleIntro />
       <Timeline />
       <Location />

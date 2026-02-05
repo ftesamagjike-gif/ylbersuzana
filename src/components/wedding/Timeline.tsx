@@ -16,7 +16,7 @@ const timelineEvents = [
   },
   {
     time: "21:30",
-    title: "Daraka & Muzikë Live",
+    title: "Darka & Muzikë Live",
     description: "Shijojmë darkën dhe kënaqemi me muzikë të gjallë",
     icon: Music,
   },
