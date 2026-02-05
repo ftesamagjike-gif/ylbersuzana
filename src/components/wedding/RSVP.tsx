@@ -95,7 +95,7 @@ const RSVP = () => {
             Konfirmo Ardhjen
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">
-            Ju lutemi konfirmoni pranimin tuaj deri më 15 Korrik 2026
+            Ju lutemi konfirmoni pranimin tuaj deri më 01 Qershor 2026
           </p>
           <div className="flex items-center justify-center gap-4">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold-soft" />
