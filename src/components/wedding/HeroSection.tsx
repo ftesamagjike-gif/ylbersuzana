@@ -9,7 +9,7 @@ const HeroSection = () => {
         <img
           src={weddingBg}
           alt="Wedding background"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-[45%_50%] sm:object-[45%_50%] md:object-[45%_50%] lg:object-[45%_50%] xl:object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 via-foreground/40 to-foreground/70" />
       </div>
